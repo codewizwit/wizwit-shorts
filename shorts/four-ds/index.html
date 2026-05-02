@@ -1,0 +1,878 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Four Ds · Field Notes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,700;9..144,900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --color-cream: #f5f3ee;
+        --color-ink: #1a1a1a;
+        --color-ink-soft: #4a4a4a;
+        --color-gray: #6b6b6b;
+        --color-gray-light: #a3a3a3;
+        --color-gray-border: #d4d2cd;
+        --color-gold: #c8973e;
+        --color-gold-dark: #9a7230;
+
+        --font-display: "Fraunces", "Iowan Old Style", Georgia, serif;
+        --font-body:
+          "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+        --font-mono:
+          "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+        --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+        --ease-morph: cubic-bezier(0.65, 0, 0.35, 1);
+
+        --beat-pad-y: clamp(3rem, 10vh, 8rem);
+        --measure: 34rem;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        background: var(--color-cream);
+        color: var(--color-ink);
+        font-family: var(--font-body);
+        font-size: clamp(14px, 0.8vw + 12px, 16px);
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+      }
+
+      .back-link {
+        position: fixed;
+        top: clamp(1rem, 2.5vw, 2rem);
+        left: clamp(1rem, 2.5vw, 2rem);
+        z-index: 60;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 0.85rem;
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        font-weight: 500;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--color-gold-dark);
+        text-decoration: none;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        background: rgba(245, 243, 238, 0.7);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        transition: all 200ms var(--ease-out);
+      }
+
+      .back-link:hover {
+        color: var(--color-gold);
+        border-color: var(--color-gray-border);
+      }
+
+      .back-link__arrow {
+        transition: transform 200ms var(--ease-out);
+      }
+
+      .back-link:hover .back-link__arrow {
+        transform: translateX(-2px);
+      }
+
+      body.in-dark-section .back-link,
+      .loop-beat ~ .back-link {
+        color: var(--color-gold);
+        background: rgba(26, 26, 26, 0.5);
+      }
+
+      .grain {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.03;
+        z-index: 100;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      }
+
+      .beat {
+        min-height: 100vh;
+        padding: var(--beat-pad-y) clamp(1.25rem, 5vw, 3rem);
+        display: flex;
+        align-items: center;
+        position: relative;
+      }
+
+      .beat__inner {
+        max-width: 60rem;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .kicker {
+        font-family: var(--font-body);
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--color-gold-dark);
+        margin-bottom: 1.5rem;
+        display: inline-block;
+      }
+
+      h1 {
+        font-family: var(--font-display);
+        font-variation-settings: "opsz" 144;
+        font-weight: 900;
+        font-size: clamp(2.8rem, 7vw, 5.6rem);
+        line-height: 0.98;
+        letter-spacing: -0.02em;
+        color: var(--color-ink);
+        margin-bottom: 1.5rem;
+        text-wrap: balance;
+      }
+
+      h2 {
+        font-family: var(--font-display);
+        font-variation-settings: "opsz" 60;
+        font-weight: 700;
+        font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+        line-height: 1.05;
+        letter-spacing: -0.015em;
+        margin-bottom: 1rem;
+        text-wrap: balance;
+      }
+
+      .lede {
+        font-size: 1.15em;
+        color: var(--color-ink-soft);
+        max-width: var(--measure);
+        margin-bottom: 1.5rem;
+      }
+
+      p {
+        max-width: var(--measure);
+        margin-bottom: 1rem;
+        color: var(--color-ink);
+      }
+
+      p.muted {
+        color: var(--color-ink-soft);
+      }
+
+      code,
+      .mono {
+        font-family: var(--font-mono);
+        font-size: 0.92em;
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(14px);
+        transition:
+          opacity 800ms var(--ease-out),
+          transform 800ms var(--ease-out);
+      }
+      .beat.is-in .reveal {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .beat.is-in .reveal--d1 {
+        transition-delay: 120ms;
+      }
+      .beat.is-in .reveal--d2 {
+        transition-delay: 260ms;
+      }
+      .beat.is-in .reveal--d3 {
+        transition-delay: 400ms;
+      }
+      .beat.is-in .reveal--d4 {
+        transition-delay: 540ms;
+      }
+      .beat.is-in .reveal--d5 {
+        transition-delay: 680ms;
+      }
+
+      /* Title beat */
+      .title-beat .four {
+        font-family: var(--font-display);
+        font-variation-settings: "opsz" 144;
+        font-weight: 900;
+        font-size: clamp(8rem, 24vw, 22rem);
+        line-height: 0.85;
+        letter-spacing: -0.04em;
+        color: var(--color-gold);
+        display: block;
+      }
+
+      .title-beat .ds {
+        font-family: var(--font-display);
+        font-variation-settings: "opsz" 144;
+        font-weight: 900;
+        font-size: clamp(3rem, 9vw, 7rem);
+        line-height: 1;
+        letter-spacing: -0.02em;
+        margin-top: -0.5rem;
+      }
+
+      .title-beat .ds em {
+        font-style: italic;
+        font-weight: 500;
+        color: var(--color-gold-dark);
+      }
+
+      /* D-beat shared */
+      .d-beat .label {
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--color-gold-dark);
+        margin-bottom: 0.5rem;
+        letter-spacing: 0.05em;
+      }
+
+      .d-beat .big-letter {
+        font-family: var(--font-display);
+        font-variation-settings: "opsz" 144;
+        font-weight: 900;
+        font-size: clamp(10rem, 32vw, 26rem);
+        line-height: 0.8;
+        letter-spacing: -0.05em;
+        color: var(--color-ink);
+        position: absolute;
+        right: clamp(1rem, 5vw, 4rem);
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0.06;
+        z-index: 0;
+        pointer-events: none;
+        user-select: none;
+      }
+
+      .d-beat .beat__inner {
+        position: relative;
+        z-index: 1;
+      }
+
+      .question {
+        font-family: var(--font-display);
+        font-variation-settings: "opsz" 144;
+        font-weight: 500;
+        font-style: italic;
+        font-size: clamp(1.4rem, 2.6vw, 2rem);
+        line-height: 1.25;
+        color: var(--color-gold-dark);
+        margin-top: 2rem;
+        padding-left: 1.5rem;
+        border-left: 3px solid var(--color-gold);
+        max-width: var(--measure);
+      }
+
+      .lens-list {
+        list-style: none;
+        margin-top: 1.5rem;
+        max-width: var(--measure);
+      }
+
+      .lens-list li {
+        padding: 0.75rem 0;
+        border-bottom: 1px solid var(--color-gray-border);
+        display: flex;
+        gap: 1rem;
+      }
+
+      .lens-list li:last-child {
+        border-bottom: none;
+      }
+
+      .lens-list .lens-name {
+        font-weight: 600;
+        color: var(--color-ink);
+        flex-shrink: 0;
+        min-width: 8rem;
+      }
+
+      .lens-list .lens-q {
+        color: var(--color-ink-soft);
+        font-style: italic;
+      }
+
+      /* Loop beat */
+      .loop-beat {
+        background: var(--color-ink);
+        color: var(--color-cream);
+      }
+
+      .loop-beat .kicker {
+        color: var(--color-gold);
+      }
+      .loop-beat h2 {
+        color: var(--color-cream);
+      }
+      .loop-beat p {
+        color: var(--color-cream);
+        opacity: 0.85;
+      }
+
+      .loop-ring {
+        position: relative;
+        width: min(440px, 82vw);
+        aspect-ratio: 1;
+        margin: 3rem auto 1.5rem;
+      }
+
+      .loop-ring__svg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+
+      .loop-ring__arc {
+        fill: none;
+        stroke: var(--color-gold);
+        stroke-width: 0.6;
+        stroke-dasharray: 1.6 1.4;
+        opacity: 0.55;
+      }
+
+      .loop-ring__center {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-family: var(--font-display);
+        font-style: italic;
+        color: var(--color-gold);
+        opacity: 0.7;
+        font-size: clamp(0.85rem, 1.4vw, 1rem);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        text-align: center;
+        line-height: 1.4;
+      }
+
+      .loop-ring__center-symbol {
+        display: block;
+        font-style: normal;
+        font-size: clamp(2rem, 4vw, 2.6rem);
+        opacity: 0.55;
+        margin-bottom: 0.2rem;
+        letter-spacing: 0;
+      }
+
+      .loop-ring__node {
+        position: absolute;
+        font-family: var(--font-mono);
+        font-size: clamp(0.78rem, 1.2vw, 0.92rem);
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        padding: 0.55rem 1rem;
+        border: 1.5px solid var(--color-gold);
+        border-radius: 4px;
+        color: var(--color-cream);
+        background: var(--color-ink);
+        transition: all 250ms var(--ease-out);
+        white-space: nowrap;
+      }
+
+      .loop-ring__node--top {
+        top: 0;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+      .loop-ring__node--right {
+        right: 0;
+        top: 50%;
+        transform: translate(50%, -50%);
+      }
+      .loop-ring__node--bottom {
+        bottom: 0;
+        left: 50%;
+        transform: translate(-50%, 50%);
+      }
+      .loop-ring__node--left {
+        left: 0;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .loop-ring__node.pulse {
+        background: var(--color-gold);
+        color: var(--color-ink);
+        box-shadow: 0 0 30px rgba(200, 151, 62, 0.45);
+        z-index: 2;
+      }
+      .loop-ring__node--top.pulse {
+        transform: translate(-50%, -50%) scale(1.08);
+      }
+      .loop-ring__node--right.pulse {
+        transform: translate(50%, -50%) scale(1.08);
+      }
+      .loop-ring__node--bottom.pulse {
+        transform: translate(-50%, 50%) scale(1.08);
+      }
+      .loop-ring__node--left.pulse {
+        transform: translate(-50%, -50%) scale(1.08);
+      }
+
+      /* Closer */
+      .credit {
+        margin-top: 3rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--color-gray-border);
+        font-size: 0.85rem;
+        color: var(--color-ink-soft);
+        max-width: var(--measure);
+      }
+
+      .credit a {
+        color: var(--color-gold-dark);
+        text-decoration: underline;
+        text-decoration-thickness: 1.5px;
+        text-underline-offset: 3px;
+        transition: color 200ms var(--ease-out);
+      }
+
+      .credit a:hover {
+        color: var(--color-gold);
+      }
+
+      .closer-beat .signature {
+        font-family: var(--font-display);
+        font-variation-settings: "opsz" 144;
+        font-style: italic;
+        font-weight: 500;
+        color: var(--color-gold-dark);
+        font-size: 1.2rem;
+        margin-top: 2rem;
+      }
+
+      .entry {
+        margin-top: 2.5rem;
+        padding-top: 1.75rem;
+        border-top: 1px solid var(--color-gray-border);
+        max-width: var(--measure);
+      }
+
+      .entry__title {
+        display: block;
+        font-family: var(--font-body);
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--color-gold-dark);
+        margin-bottom: 0.6rem;
+      }
+
+      .entry__text {
+        color: var(--color-ink-soft);
+        margin-bottom: 1rem;
+      }
+
+      .entry__commands {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+      }
+
+      .entry__commands code {
+        font-family: var(--font-mono);
+        font-size: 0.88rem;
+        padding: 0.4rem 0.75rem;
+        background: var(--color-cream);
+        border: 1px solid var(--color-gray-border);
+        border-left: 3px solid var(--color-gold);
+        border-radius: 4px;
+        color: var(--color-ink);
+        transition: all 200ms var(--ease-out);
+      }
+
+      .entry__commands code:hover {
+        border-left-color: var(--color-gold-dark);
+        background: #ffffff;
+      }
+
+      /* Progress rail */
+      .rail {
+        position: fixed;
+        right: clamp(1rem, 2vw, 2rem);
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        z-index: 50;
+      }
+
+      .rail-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: transparent;
+        border: 1.5px solid var(--color-gray-light);
+        cursor: pointer;
+        transition: all 250ms var(--ease-out);
+        padding: 0;
+        position: relative;
+      }
+
+      .rail-dot:hover {
+        border-color: var(--color-gold);
+      }
+
+      .rail-dot.active {
+        background: var(--color-gold);
+        border-color: var(--color-gold);
+        transform: scale(1.3);
+      }
+
+      .rail-dot.past {
+        background: var(--color-gray-light);
+        border-color: var(--color-gray-light);
+      }
+
+      .rail-dot .rail-label {
+        position: absolute;
+        right: 22px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        color: var(--color-ink-soft);
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 200ms var(--ease-out);
+        letter-spacing: 0.05em;
+      }
+
+      .rail-dot:hover .rail-label,
+      .rail-dot.active .rail-label {
+        opacity: 1;
+      }
+
+      .loop-beat ~ .rail .rail-label,
+      body.in-dark-section .rail-label {
+        color: var(--color-gray-light);
+      }
+
+      @media (max-width: 600px) {
+        .rail {
+          display: none;
+        }
+        .d-beat .big-letter {
+          font-size: clamp(8rem, 50vw, 18rem);
+          opacity: 0.04;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          transition-duration: 0.01ms !important;
+        }
+        .reveal {
+          opacity: 1;
+          transform: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grain"></div>
+
+    <a href="/" class="back-link" aria-label="Back to Writing">
+      <span class="back-link__arrow" aria-hidden="true">←</span>
+      <span class="back-link__text">Writing</span>
+    </a>
+
+    <nav class="rail" aria-label="Section navigation">
+      <button class="rail-dot active" data-target="0" aria-label="Title">
+        <span class="rail-label">The Four Ds</span>
+      </button>
+      <button class="rail-dot" data-target="1" aria-label="Delegation">
+        <span class="rail-label">Delegation</span>
+      </button>
+      <button class="rail-dot" data-target="2" aria-label="Description">
+        <span class="rail-label">Description</span>
+      </button>
+      <button class="rail-dot" data-target="3" aria-label="Discernment">
+        <span class="rail-label">Discernment</span>
+      </button>
+      <button class="rail-dot" data-target="4" aria-label="Diligence">
+        <span class="rail-label">Diligence</span>
+      </button>
+      <button class="rail-dot" data-target="5" aria-label="The Loop">
+        <span class="rail-label">The Loop</span>
+      </button>
+      <button class="rail-dot" data-target="6" aria-label="Practice">
+        <span class="rail-label">Practice</span>
+      </button>
+    </nav>
+
+    <section class="beat title-beat" data-beat="0">
+      <div class="beat__inner">
+        <span class="kicker reveal">Field Notes · AI Fluency</span>
+        <span class="four reveal reveal--d1">4</span>
+        <h1 class="ds reveal reveal--d2">
+          Ds for working <em>well</em><br />with Claude.
+        </h1>
+        <p class="lede reveal reveal--d3" style="margin-top: 2rem">
+          A practice loop. Scroll through to meet each one.
+        </p>
+      </div>
+    </section>
+
+    <section class="beat d-beat" data-beat="1">
+      <span class="big-letter">D</span>
+      <div class="beat__inner">
+        <span class="label reveal">No. 01</span>
+        <h2 class="reveal reveal--d1">Delegation.</h2>
+        <p class="lede reveal reveal--d2">
+          The first decision is whether AI should touch this at all.
+        </p>
+        <p class="reveal reveal--d3">
+          Pick the right task and the right model. Some work is yours alone.
+          Some belongs to a teammate over coffee. Some is a perfect fit for
+          Haiku, some needs Opus, some needs a subagent so the main thread stays
+          clean.
+        </p>
+        <div class="question reveal reveal--d4">
+          What is this task actually asking for, and who or what is best suited
+          to it?
+        </div>
+      </div>
+    </section>
+
+    <section class="beat d-beat" data-beat="2">
+      <span class="big-letter">D</span>
+      <div class="beat__inner">
+        <span class="label reveal">No. 02</span>
+        <h2 class="reveal reveal--d1">Description.</h2>
+        <p class="lede reveal reveal--d2">
+          Tell Claude what a smart colleague would need.
+        </p>
+        <p class="reveal reveal--d3">
+          The goal. The context already in your head. The constraints. The
+          success criteria. The format. Specs reduce ambiguity. Vagueness is
+          expensive, and you pay for it in revisions.
+        </p>
+        <div class="question reveal reveal--d4">
+          Did I give it enough to make a real judgment call, or am I hoping it
+          guesses right?
+        </div>
+      </div>
+    </section>
+
+    <section class="beat d-beat" data-beat="3">
+      <span class="big-letter">D</span>
+      <div class="beat__inner">
+        <span class="label reveal">No. 03</span>
+        <h2 class="reveal reveal--d1">Discernment.</h2>
+        <p class="lede reveal reveal--d2">Three lenses, every time.</p>
+        <ul class="lens-list reveal reveal--d3">
+          <li>
+            <span class="lens-name">Product</span
+            ><span class="lens-q">Is the answer correct?</span>
+          </li>
+          <li>
+            <span class="lens-name">Process</span
+            ><span class="lens-q">Did the reasoning hold up?</span>
+          </li>
+          <li>
+            <span class="lens-name">Performance</span
+            ><span class="lens-q">Was it communicated clearly?</span>
+          </li>
+        </ul>
+        <div class="question reveal reveal--d4">
+          Am I trusting this because it sounds confident, or because I checked?
+        </div>
+      </div>
+    </section>
+
+    <section class="beat d-beat" data-beat="4">
+      <span class="big-letter">D</span>
+      <div class="beat__inner">
+        <span class="label reveal">No. 04</span>
+        <h2 class="reveal reveal--d1">Diligence.</h2>
+        <p class="lede reveal reveal--d2">Verify, attribute, own it.</p>
+        <p class="reveal reveal--d3">
+          You are accountable for whatever ships under your name. Test the code.
+          Read the cited source. Run the migration on a copy. The AI did not
+          make the decision. You did.
+        </p>
+        <div class="question reveal reveal--d4">
+          Would I stake my reputation on this exact output, exactly as it
+          stands?
+        </div>
+      </div>
+    </section>
+
+    <section class="beat loop-beat" data-beat="5">
+      <div class="beat__inner">
+        <span class="kicker reveal">The shape of the work</span>
+        <h2 class="reveal reveal--d1">It is a loop, not a line.</h2>
+        <p class="reveal reveal--d2" style="max-width: var(--measure)">
+          Discernment fails, you sharpen the description. Diligence catches a
+          gap, you delegate differently next time. Each pass through the loop is
+          the practice.
+        </p>
+
+        <div
+          class="loop-ring reveal reveal--d3"
+          role="img"
+          aria-label="Loop of the four Ds: Delegation, Description, Discernment, Diligence, repeating"
+        >
+          <svg class="loop-ring__svg" viewBox="0 0 100 100" aria-hidden="true">
+            <defs>
+              <marker
+                id="arrow-head"
+                viewBox="0 0 10 10"
+                refX="8"
+                refY="5"
+                markerWidth="4"
+                markerHeight="4"
+                orient="auto-start-reverse"
+              >
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#c8973e" opacity="0.85" />
+              </marker>
+            </defs>
+            <path
+              class="loop-ring__arc"
+              d="M 60 12 A 38 38 0 0 1 88 40"
+              marker-end="url(#arrow-head)"
+            />
+            <path
+              class="loop-ring__arc"
+              d="M 88 60 A 38 38 0 0 1 60 88"
+              marker-end="url(#arrow-head)"
+            />
+            <path
+              class="loop-ring__arc"
+              d="M 40 88 A 38 38 0 0 1 12 60"
+              marker-end="url(#arrow-head)"
+            />
+            <path
+              class="loop-ring__arc"
+              d="M 12 40 A 38 38 0 0 1 40 12"
+              marker-end="url(#arrow-head)"
+            />
+          </svg>
+          <div class="loop-ring__center">
+            <span class="loop-ring__center-symbol">↻</span>the practice
+          </div>
+          <div class="loop-ring__node loop-ring__node--top">Delegation</div>
+          <div class="loop-ring__node loop-ring__node--right">Description</div>
+          <div class="loop-ring__node loop-ring__node--bottom">Discernment</div>
+          <div class="loop-ring__node loop-ring__node--left">Diligence</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="beat closer-beat" data-beat="6">
+      <div class="beat__inner">
+        <span class="kicker reveal">The practice is the point</span>
+        <h2 class="reveal reveal--d1">Four Ds. One loop. A working life.</h2>
+        <p class="lede reveal reveal--d2">
+          Nobody nails this on the first prompt. The fluency is built in the
+          loop, every time you delegate, describe, discern, and own the result.
+        </p>
+        <p class="reveal reveal--d3">
+          Run it again tomorrow. Run it again next week. The loop is the
+          practice, and the practice is the skill.
+        </p>
+
+        <p class="credit reveal reveal--d4">
+          The Four Ds framework is from Anthropic Academy's
+          <a
+            href="https://anthropic.skilljar.com/ai-fluency-framework-foundations"
+            target="_blank"
+            rel="noopener noreferrer"
+            >AI Fluency: Framework &amp; Foundations</a
+          >
+          course. Shared here in the spirit Anthropic encourages: take it, run
+          it, spread the knowledge.
+        </p>
+      </div>
+    </section>
+
+    <script>
+      const beats = document.querySelectorAll(".beat");
+      const dots = document.querySelectorAll(".rail-dot");
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            const beat = entry.target;
+            beat.classList.add("is-in");
+            const beatNumber = Number(beat.dataset.beat);
+            dots.forEach((dot, dotIndex) => {
+              dot.classList.remove("active", "past");
+              if (dotIndex === beatNumber) dot.classList.add("active");
+              else if (dotIndex < beatNumber) dot.classList.add("past");
+            });
+          });
+        },
+        { threshold: 0.35, rootMargin: "0px 0px -10% 0px" },
+      );
+
+      beats.forEach((beat) => observer.observe(beat));
+
+      dots.forEach((dot) => {
+        dot.addEventListener("click", () => {
+          const targetIndex = Number(dot.dataset.target);
+          beats[targetIndex].scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        });
+      });
+
+      document.addEventListener("keydown", (event) => {
+        const currentIndex = Array.from(dots).findIndex((d) =>
+          d.classList.contains("active"),
+        );
+        if (currentIndex < 0) return;
+        let nextIndex = currentIndex;
+        if (["ArrowDown", "ArrowRight", "PageDown"].includes(event.key))
+          nextIndex = Math.min(currentIndex + 1, beats.length - 1);
+        if (["ArrowUp", "ArrowLeft", "PageUp"].includes(event.key))
+          nextIndex = Math.max(currentIndex - 1, 0);
+        if (event.key === "Home") nextIndex = 0;
+        if (event.key === "End") nextIndex = beats.length - 1;
+        if (nextIndex !== currentIndex) {
+          event.preventDefault();
+          beats[nextIndex].scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }
+      });
+
+      const loopNodes = document.querySelectorAll(".loop-ring__node");
+      let loopPulseIndex = 0;
+      setInterval(() => {
+        loopNodes.forEach((node) => node.classList.remove("pulse"));
+        loopNodes[loopPulseIndex].classList.add("pulse");
+        loopPulseIndex = (loopPulseIndex + 1) % loopNodes.length;
+      }, 1400);
+    </script>
+  </body>
+</html>

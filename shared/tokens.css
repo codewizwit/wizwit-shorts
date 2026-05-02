@@ -1,0 +1,41 @@
+/* ============================================
+   Wizwit Shorts hub — design tokens
+   Inherits codewizwit brand baseline.
+   Accent palette is hub-specific (per-surface accent rule).
+   ============================================ */
+
+:root {
+  /* Brand baseline — fixed across the codewizwit suite */
+  --color-cream: #f5f3ee;
+  --color-ink: #1a1a1a;
+  --color-ink-soft: #4a4a4a;
+  --color-gray: #6b6b6b;
+  --color-gray-light: #a3a3a3;
+  --color-gray-border: #d4d2cd;
+  --color-white: #ffffff;
+
+  /* Typography — fixed across the suite */
+  --font-display: "Fraunces", "Iowan Old Style", Georgia, serif;
+  --font-body:
+    "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Hub-specific accent palette (per-surface, not brand-wide) */
+  --accent-satire: #ff5a36; /* coral */
+  --accent-field: #2d5f4e; /* forest green */
+  --accent-essay: var(--color-ink);
+  --accent-practice: #c8973e; /* gold */
+
+  /* Easing + motion */
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-morph: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Composition */
+  --beat-pad-y: clamp(3rem, 10vh, 8rem);
+  --measure: 34rem;
+}
+
+/* Semantic aliases */
+:root {
+  --color-bg: var(--color-cream);
+}
